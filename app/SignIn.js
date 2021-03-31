@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useContext } from "react";
 import {
   Text,
   StyleSheet,
@@ -10,13 +10,17 @@ import { LinearGradient } from "expo-linear-gradient";
 import { FontAwesome, Feather } from "@expo/vector-icons";
 import { TextInput } from "react-native-gesture-handler";
 
+import { AuthContext } from "../components/context";
+
 const SignInScreen = ({ navigation }) => {
-  const [data, setData] = React.useState({
+  const [data, setData] = useState({
     email: "",
     password: "",
     check_textInputChange: false,
     secureTextEntry: true,
   });
+
+  const { signIn } = useContext(AuthContext);
 
   const textInputChange = (val) => {
     if (val.length != 0) {
@@ -46,6 +50,10 @@ const SignInScreen = ({ navigation }) => {
       ...data,
       secureTextEntry: !data.secureTextEntry,
     });
+  };
+
+  const loginHandle = (email, password) => {
+    signIn(email, password);
   };
 
   return (
@@ -86,9 +94,21 @@ const SignInScreen = ({ navigation }) => {
           </TouchableOpacity>
         </View>
         <View>
-          <LinearGradient colors={["#08d4c4", "#01ab9d"]} style={styles.signIn}>
-            <Text style={[styles.textSignIn, { color: "#fff" }]}> Sign In</Text>
-          </LinearGradient>
+          <TouchableOpacity
+            onPress={() => {
+              loginHandle(data.email, data.password);
+            }}
+          >
+            <LinearGradient
+              colors={["#08d4c4", "#01ab9d"]}
+              style={styles.signIn}
+            >
+              <Text style={[styles.textSignIn, { color: "#fff" }]}>
+                {" "}
+                Sign In
+              </Text>
+            </LinearGradient>
+          </TouchableOpacity>
           <TouchableOpacity
             onPress={() => navigation.navigate("SignUp")}
             style={[
