@@ -1,15 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import { Feather, FontAwesome } from "@expo/vector-icons";
 import { Text, View, StyleSheet, Button } from "react-native";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { LinearGradient } from "expo-linear-gradient";
+import { useNavigation } from "@react-navigation/native";
 
 const SignUpScreen = ({ navigation }) => {
-  const [data, setData] = React.useState({
+  const navigations = useNavigation();
+  const [data, setData] = useState({
     email: "",
     passsword: "",
     confirmPassword: "",
-    check_textInputChange: false,
+    checkTextInputChange: false,
     secureTextEntry: true,
     confirmSecureTextEntry: true,
   });
@@ -18,13 +20,13 @@ const SignUpScreen = ({ navigation }) => {
       setData({
         ...data,
         email: val,
-        check_textInputChange: true,
+        checkTextInputChange: true,
       });
     } else {
       setData({
         ...data,
         email: val,
-        check_textInputChange: false,
+        checkTextInputChange: false,
       });
     }
   };
@@ -51,6 +53,28 @@ const SignUpScreen = ({ navigation }) => {
       ...data,
       confirmSecureTextEntry: !data.confirmSecureTextEntry,
     });
+  };
+
+  const submit = async (props) => {
+    fetch("http://192.168.29.7:3000/post", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: props.email,
+        password: props.password,
+      }),
+    });
+    // .then((res) => res.json())
+    // .then(async (data) => {
+    //   try {
+    //     navigation.navigate("Home");
+    //   } catch (err) {
+    //     console.log("Error login" + err);
+    //   }
+    // });
   };
 
   return (
@@ -102,9 +126,11 @@ const SignUpScreen = ({ navigation }) => {
             )}
           </TouchableOpacity>
         </View>
-        <LinearGradient colors={["#08d4c4", "#01ab9d"]} style={styles.signUp}>
-          <Text style={[styles.textSignUp, { color: "white" }]}>Sign Up</Text>
-        </LinearGradient>
+        <TouchableOpacity onPress={() => submit(data)}>
+          <LinearGradient colors={["#08d4c4", "#01ab9d"]} style={styles.signUp}>
+            <Text style={[styles.textSignUp, { color: "white" }]}>Sign Up</Text>
+          </LinearGradient>
+        </TouchableOpacity>
         <TouchableOpacity
           onPress={() => navigation.navigate("SignIn")}
           style={[

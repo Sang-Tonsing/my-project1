@@ -11,7 +11,7 @@ const HomeScreen = ({ navigation }) => {
         title="Goto Details"
         onPress={() => navigation.navigate("Details")}
       /> */}
-      <Text>Hello world</Text>
+      <Text>Home Screen</Text>
     </Styles>
   );
 };

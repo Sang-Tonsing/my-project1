@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import {
+  Animated,
   Text,
   StyleSheet,
   View,
@@ -11,6 +12,7 @@ import { FontAwesome, Feather } from "@expo/vector-icons";
 import { TextInput } from "react-native-gesture-handler";
 
 import { AuthContext } from "../components/context";
+import { createAnimatableComponent } from "react-native-animatable";
 
 const SignInScreen = ({ navigation }) => {
   const [data, setData] = useState({
@@ -18,31 +20,44 @@ const SignInScreen = ({ navigation }) => {
     password: "",
     check_textInputChange: false,
     secureTextEntry: true,
+    isValidEmail: true,
+    isValidPassword: true,
   });
 
   const { signIn } = useContext(AuthContext);
 
   const textInputChange = (val) => {
-    if (val.length != 0) {
+    if (val.trim().length >= 8) {
       setData({
         ...data,
         email: val,
         check_textInputChange: true,
+        isValidEmail: true,
       });
     } else {
       setData({
         ...data,
         email: val,
         check_textInputChange: false,
+        isValidEmail: false,
       });
     }
   };
 
   const handlePasswordChange = (val) => {
-    setData({
-      ...data,
-      password: val,
-    });
+    if (val.trim().length >= 8) {
+      setData({
+        ...data,
+        password: val,
+        isValidPassword: true,
+      });
+    } else {
+      setData({
+        ...data,
+        password: val,
+        isValidPassword: false,
+      });
+    }
   };
 
   const updateSecureEntryText = (val) => {
@@ -51,6 +66,20 @@ const SignInScreen = ({ navigation }) => {
       secureTextEntry: !data.secureTextEntry,
     });
   };
+
+  // const handleValidEmail = (val) => {
+  //   if (val.trim().length >= 8) {
+  //     setData({
+  //       ...data,
+  //       isValidEmail: true,
+  //     });
+  //   } else {
+  //     setData({
+  //       ...data,
+  //       isValidEmail: false,
+  //     });
+  //   }
+  // };
 
   const loginHandle = (email, password) => {
     signIn(email, password);
@@ -76,7 +105,13 @@ const SignInScreen = ({ navigation }) => {
             <Feather name="user-check" color="green" size={20} />
           ) : null}
         </View>
+        {data.isValidEmail ? null : (
+          <Text style={styles.errorMsg}>
+            Username must be more than 8 characters long.
+          </Text>
+        )}
         {/* <Text style={styles.text_footer}>Password</Text> */}
+
         <View style={[styles.action, { marginTop: 20 }]}>
           <FontAwesome name="lock" color="#05375a" size={20} />
           <TextInput
@@ -93,6 +128,11 @@ const SignInScreen = ({ navigation }) => {
             )}
           </TouchableOpacity>
         </View>
+        {data.isValidPassword ? null : (
+          <Text style={styles.errorMsg}>
+            Password must be more than 8 characters
+          </Text>
+        )}
         <View>
           <TouchableOpacity
             onPress={() => {
@@ -169,6 +209,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
   },
   signIn: {
+    marginTop: 20,
     padding: 10,
     borderRadius: 10,
     justifyContent: "center",
@@ -178,5 +219,8 @@ const styles = StyleSheet.create({
   textSignIn: {
     fontSize: 18,
     fontWeight: "bold",
+  },
+  errorMsg: {
+    color: "red",
   },
 });

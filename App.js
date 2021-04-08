@@ -3,7 +3,6 @@ import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import MainTabScreen from "./app/MainTab";
 import { createStackNavigator } from "@react-navigation/stack";
-import HomeScreen from "./app/Home";
 import RootStackScreen from "./app/RootStack";
 
 import { AuthContext } from "./components/context";
@@ -15,7 +14,7 @@ const App = () => {
   // const [userToken, setUserToken] = useState(null);
 
   const initialLoginState = {
-    isLoadin: true,
+    isLoading: true,
     email: null,
     userToken: null,
   };
@@ -62,20 +61,20 @@ const App = () => {
         let userToken = null;
         if (email == "sang" && password == "tons") {
           userToken = "sdf";
-          console.log("logind");
-        } else {
-          alert("Error");
+          // console.log("logind");
         }
-        console.log("user token ", userToken);
+        // else {
+        //   alert("Error");
+        // }
+        console.log("user token signin", userToken);
         dispatch({ type: "LOGIN", id: email, token: userToken });
       },
       signOut: () => {
         // setUserToken(null);
         // setIsLoading(false);
         let userToken;
-        userToken = "sdfa";
-        console.log("user token:  ", userToken);
-        dispatch({ type: "RETRIEVE_TOKEN", token: userToken });
+        userToken = null;
+        console.log("user token signout:  ", userToken);
         dispatch({ type: "LOGOUT" });
       },
       signUp: () => {
@@ -89,6 +88,10 @@ const App = () => {
   useEffect(() => {
     setTimeout(() => {
       // setIsLoading(false);
+      let userToken;
+      userToken = "fd";
+      console.log("user token token: ", userToken);
+      dispatch({ type: "RETRIEVE_TOKEN", token: userToken });
     }, 1000);
   }, []);
 
@@ -114,7 +117,7 @@ const App = () => {
             }}
           >
             <Stack.Screen name="Match & Chat" component={MainTabScreen} />
-            <Stack.Screen name="Welcome" component={RootStackScreen} />
+            {/* <Stack.Screen name="Welcome" component={RootStackScreen} /> */}
           </Stack.Navigator>
         ) : (
           <RootStackScreen />

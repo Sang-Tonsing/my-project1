@@ -6,7 +6,7 @@ import Styles from "./Styles";
 function NotificationsScreen() {
   return (
     <Styles>
-      <Text>Notifications!</Text>
+      <Text>Notifications Screen</Text>
     </Styles>
   );
 }
